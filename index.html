@@ -1,1 +1,51 @@
-<h1>Hello!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Orders Dashboard</h1>
+    <canvas id="ordersChart" width="400" height="200"></canvas>
+    <script>
+        fetch('https://dummyjson.com/carts')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('ordersChart').getContext('2d');
+                const labels = data.map(order => order.date);
+                const ordersData = data.map(order => order.orders);
+                const revenueData = data.map(order => order.revenue);
+                
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Orders',
+                                data: ordersData,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Revenue',
+                                data: revenueData,
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
