@@ -36,7 +36,7 @@
         </div>
     </div>
     <script>
-        fetch('https://your-fastapi-url/orders')
+        fetch('https://dummyjson.com/c/a567-f719-4649-b295')
             .then(response => response.json())
             .then(data => {
                 const totalOrders = data.reduce((sum, order) => sum + order.orders, 0);
