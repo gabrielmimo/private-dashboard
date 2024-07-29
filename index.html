@@ -4,48 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .kpi-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .kpi {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 150px;
+        }
+        .kpi h2 {
+            margin: 10px 0;
+            font-size: 2em;
+        }
+    </style>
 </head>
 <body>
     <h1>Orders Dashboard</h1>
-    <canvas id="ordersChart" width="400" height="200"></canvas>
+    <div class="kpi-container">
+        <div class="kpi">
+            <h2 id="totalOrders">0</h2>
+            <p>Total Orders</p>
+        </div>
+        <div class="kpi">
+            <h2 id="totalRevenue">0</h2>
+            <p>Total Revenue</p>
+        </div>
+    </div>
     <script>
-        fetch('https://dummyjson.com/c/a567-f719-4649-b295')
+        fetch('https://your-fastapi-url/orders')
             .then(response => response.json())
             .then(data => {
-                const ctx = document.getElementById('ordersChart').getContext('2d');
-                const labels = data.map(order => order.date);
-                const ordersData = data.map(order => order.orders);
-                const revenueData = data.map(order => order.revenue);
-                
-                const chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'Orders',
-                                data: ordersData,
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Revenue',
-                                data: revenueData,
-                                borderColor: 'rgba(153, 102, 255, 1)',
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            });
+                const totalOrders = data.reduce((sum, order) => sum + order.orders, 0);
+                const totalRevenue = data.reduce((sum, order) => sum + order.revenue, 0);
+
+                document.getElementById('totalOrders').textContent = totalOrders;
+                document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            })
+            .catch(error => console.error('Error fetching data:', error));
     </script>
 </body>
 </html>
