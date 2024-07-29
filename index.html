@@ -5,59 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            margin-top: 20px;
-            color: #2c3e50;
-        }
-        .kpi-container {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            width: 80%;
-        }
-        .kpi {
-            background-color: #2ecc71;
-            color: #2c3e50;
-            border: 2px solid #27ae60;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            width: 150px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .kpi h2 {
-            margin: 10px 0;
-            font-size: 2em;
-        }
-        .kpi p {
-            margin: 0;
-            font-size: 1em;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="stykes.css">
 </head>
 <body>
-    <h1>Orders Dashboard</h1>
-    <div class="kpi-container">
-        <div class="kpi">
-            <h2 id="totalOrders">0</h2>
-            <p>Total Orders</p>
-        </div>
-        <div class="kpi">
-            <h2 id="totalRevenue">0</h2>
-            <p>Total Revenue</p>
-        </div>
+<h1>Orders Dashboard</h1>
+<div class="kpi-container">
+    <div class="kpi">
+        <h2 id="totalOrders">0</h2>
+        <p>Total Orders</p>
     </div>
-    <script>
+    <div class="kpi">
+        <h2 id="totalRevenue">0</h2>
+        <p>Total Revenue</p>
+    </div>
+</div>
+<script>
+    function fetchData() {
         fetch('https://dummyjson.com/c/a567-f719-4649-b295')
             .then(response => response.json())
             .then(data => {
@@ -65,9 +28,19 @@
                 const totalRevenue = data.reduce((sum, order) => sum + order.revenue, 0);
 
                 document.getElementById('totalOrders').textContent = totalOrders;
-                document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+                document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                });
             })
             .catch(error => console.error('Error fetching data:', error));
-    </script>
+    }
+
+    // Fetch data immediately when the page loads
+    fetchData();
+
+    // Fetch data every 5 minutes (300,000 milliseconds)
+    setInterval(fetchData, 300000);
+</script>
 </body>
 </html>
